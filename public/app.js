@@ -3,7 +3,7 @@
 
 
 $(document).on("click", ".nav-link", function (e) {
-    
+
     getArticles(e.currentTarget.text.toLowerCase());
 })
 
@@ -19,35 +19,38 @@ $(document).on("click", "#leaveComment", function () {
     $("#saveCommentDiv").empty();
 
     $('#myModal').modal('toggle')
-    
-    
+
+
     // Save the id from the p tag
     var thisId = $(this).attr("data-id");
-  
+
     // Now make an ajax call for the Article
     $.ajax({
-      method: "GET",
-      url: "/articles/" + thisId
+        method: "GET",
+        url: "/articles/" + thisId
     })
-      // With that done, add the note information to the page
-      .then(function(data) {
-        console.log(data);
-        // A button to submit a new note, with the id of the article saved to it
+        // With that done, add the note information to the page
+        .then(function (data) {
+            console.log(data);
+            // A button to submit a new note, with the id of the article saved to it
 
-        $("#saveCommentDiv").append(`<button id ="saveComment" data-id="${data._id}" type="button" class="btn btn-primary">Save Comment</button>`);
-        
-        // If there's a note in the article
-        if (data.note) {
-          // Place the title of the note in the title input
-          $("#previousComments").append(`<strong>${data.note.title}:</strong>`);
-          // Place the body of the note in the body textarea
-          $("#previousComments").append(`${data.note.body} <br>`);
-        }
-      });
+            $("#saveCommentDiv").append(`<button id ="saveComment" data-id="${thisId}" type="button" class="btn btn-primary">Save Comment</button>`);
+
+            // If there's a note in the article
+            if (data[0].notes) {
+                data[0].notes.forEach(function(note){
+                    // Place the title of the note in the title input
+                    $("#previousComments").append(`<strong>${note.title}:</strong>`);
+                    // Place the body of the note in the body textarea
+                    $("#previousComments").append(`${note.body} <br>`);
+                });
+
+            }
+        });
 })
 
 
-var getArticles = (category)=> {
+var getArticles = (category) => {
     $("#articles").empty();
     $.getJSON("/articles/category/" + category, function (data) {
         // For each one
@@ -78,33 +81,43 @@ getArticles("national");
 
 
 
-  // When you click the savenote button
-  $(document).on("click", "#saveComment", function() {
+// When you click the savenote button
+$(document).on("click", "#saveComment", function () {
     // Grab the id associated with the article from the submit button
     var thisId = $(this).attr("data-id");
-  
+    var username = $("#nameInput").val();
+    var content = $("#commentInput").val();
+
     // Run a POST request to change the note, using what's entered in the inputs
     $.ajax({
-      method: "POST",
-      url: "/articles/" + thisId,
-      data: {
-        // Value taken from title input
-        title: $("#nameInput").val(),
-        // Value taken from note textarea
-        body: $("#commentInput").val()
-      }
+        method: "POST",
+        url: "/articles/" + thisId,
+        data: {
+            // Value taken from title input
+            title: username,
+            // Value taken from note textarea
+            body: content
+        }
     })
-      // With that done
-      .then(function(data) {
-        // Log the response
-        console.log(data);
-        // Empty the notes section
-        //$("#previousComments").empty();
-      });
-  
+        // With that done
+        .then(function (data) {
+            // Log the response
+            console.log(data);
+            // Empty the notes section
+            //$("#previousComments").empty();
+        });
+
+    
+
     // Also, remove the values entered in the input and textarea for note entry
     $("#nameInput").val("");
     $("#commentInput").val("");
-  });
-  
+
+    //display new comment
+    // Place the title of the note in the title input
+    $("#previousComments").append(`<strong>${username}:</strong>`);
+    // Place the body of the note in the body textarea
+    $("#previousComments").append(`${content} <br>`);
+});
+
 
