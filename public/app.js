@@ -13,17 +13,7 @@ $(document).on("click", "#scrape", function () {
     })
 })
 
-$(document).on("click", "#leaveComment", function () {
-    // Empty the notes from the note section
-    $("#previousComments").empty();
-    $("#saveCommentDiv").empty();
-
-    $('#myModal').modal('toggle')
-
-
-    // Save the id from the p tag
-    var thisId = $(this).attr("data-id");
-
+function getNotes(thisId){
     // Now make an ajax call for the Article
     $.ajax({
         method: "GET",
@@ -34,25 +24,43 @@ $(document).on("click", "#leaveComment", function () {
             console.log(data);
             // A button to submit a new note, with the id of the article saved to it
 
-            $("#saveCommentDiv").append(`<button id ="saveComment" data-id="${thisId}" type="button" class="btn btn-primary">Save Comment</button>`);
+           
 
             // If there's a note in the article
             if (data[0].notes) {
+                $("#previousComments").empty();
                 data[0].notes.forEach(function (note) {
                     // Place the title of the note in the title input
                     $("#previousComments").append(`<strong>${note.title}: </strong>`);
                     // Place the body of the note in the body textarea
                     $("#previousComments").append(`${note.body}`);
-                    $("#previousComments").append(`<button id="deleteComment" data-id="${note._id}"type="button" class="btn btn-light">Delete</button><br>`);
+                    $("#previousComments").append(`<button id="deleteComment" data-id="${note._id}"  article-id="${thisId}" type="button" class="btn btn-light">Delete</button><br>`);
                     
                 });
 
             }
         });
+    }
+
+$(document).on("click", "#leaveComment", function () {
+    // Empty the notes from the note section
+    $("#previousComments").empty();
+    $("#saveCommentDiv").empty();
+
+    $('#myModal').modal('toggle')
+
+
+    // Save the id from the p tag
+    var thisId = $(this).attr("data-id");
+    $("#saveCommentDiv").append(`<button id ="saveComment" data-id="${thisId}" type="button" class="btn btn-primary">Save Comment</button>`);
+
+    getNotes(thisId);
+
 })
 
 $(document).on("click", "#deleteComment", function () {
     var thisId = $(this).attr("data-id");
+    var thatId = $(this).attr("article-id")
 
     $.ajax({
         method: "DELETE",
@@ -62,9 +70,9 @@ $(document).on("click", "#deleteComment", function () {
         .then(function (data) {
             // Log the response
             console.log(data);
+
+            getNotes(thatId);
             
-            // Empty the notes section
-            //$("#previousComments").empty();
         });
 
 })
@@ -91,8 +99,10 @@ $(document).on("click", "#saveComment", function () {
         .then(function (data) {
             // Log the response
             console.log(data);
+            
+            getNotes(thisId);
             // Empty the notes section
-            //$("#previousComments").empty();
+            
         });
 
 
