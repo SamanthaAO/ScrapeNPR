@@ -1,6 +1,5 @@
 
 
-
 <div class="container ">
     <div class="row justify-content-center">
         {{#each articles}}
@@ -14,11 +13,10 @@
                     <p class="card-text">{{summary}}</p>
                     <a href="{{link}}" class="btn btn-primary">View Article</a>
                     <button id="leaveComment" data-id="{{_id}}" class="btn btn-primary">Leave Comment</button>
-                    <button id="favorite" data-id="{{_id}}" class="btn btn-primary">Favorite</button>
+                    <a href="#" id="favorite" data-id="{{_id}}" class="btn btn-primary">Favorite</a>
                 </div>
             </div>
         </div>
         {{/each}}
     </div>
 </div>
-

@@ -2,10 +2,13 @@
 
 
 
-$(document).on("click", ".nav-link", function (e) {
+// $(document).on("click", ".nav-link", function (e) {
 
-    getArticles(e.currentTarget.text.toLowerCase());
-})
+//     //getArticles(e.currentTarget.text.toLowerCase());
+//     $.get("/scraped/"+ e.currentTarget.text.toLowerCase(), function (data) {
+        
+//     })
+// })
 
 $(document).on("click", "#scrape", function () {
     $.get("/scrape", function (data) {
@@ -122,34 +125,35 @@ $(document).on("click", "#saveComment", function () {
 
 
 
-var getArticles = (category) => {
-    $("#articles").empty();
-    $.getJSON("/articles/category/" + category, function (data) {
-        // For each one
-        for (var i = 0; i < data.length; i++) {
-            // Display the apropos information on the page
-            $("#articles").append(
-                `<div class="col-sm-3">
-                <div data-id="${data[i]._id}" class="card" style="width: 18rem;">
+// var getArticles = (category) => {
+//     $("#articles").empty();
+//     $.getJSON("/articles/category/" + category, function (data) {
+//         // For each one
+//         for (var i = 0; i < data.length; i++) {
+//             // Display the apropos information on the page
+//             $("#articles").append(
+//                 `<div class="col-sm-3">
+//                 <div data-id="${data[i]._id}" class="card" style="width: 18rem;">
                 
     
-                    <img class="card-img-top" src="${data[i].image}" alt="${data[i].title}">
-                    <div class="card-body">
-                        <h5 class="card-title">${data[i].title}</h5>
-                        <p class="card-text">${data[i].summary}</p>
-                    <a href="${data[i].link}" class="btn btn-primary">View Article</a>
-                    <a href="#" id="leaveComment" data-id="${data[i]._id}" class="btn btn-primary">Leave Comment</a>
-                    <a href="#" id="favorite" data-id="${data[i]._id}" class="btn btn-primary">Favorite</a>
-                    </div>
-                </div>
-            </div>`);
+//                     <img class="card-img-top" src="${data[i].image}" alt="${data[i].title}">
+//                     <div class="card-body">
+//                         <h5 class="card-title">${data[i].title}</h5>
+//                         <p class="card-text">${data[i].summary}</p>
+//                     <a href="${data[i].link}" class="btn btn-primary">View Article</a>
+//                     <a href="#" id="leaveComment" data-id="${data[i]._id}" class="btn btn-primary">Leave Comment</a>
+//                     <a href="#" id="favorite" data-id="${data[i]._id}" class="btn btn-primary">Favorite</a>
+//                     </div>
+//                 </div>
+//             </div>`);
 
-        }
-    });
 
-}
+//         }
+//     });
 
-getArticles("national");
+// }
+
+// getArticles("national");
 
 function getFovorites() {
     // Empty articles 
@@ -191,11 +195,11 @@ function getFovorites() {
         });
 };
 
-$(document).on("click", "#viewFavorites", function () {
+// $(document).on("click", "#viewFavorites", function () {
 
-    getFovorites();
+//     getFovorites();
 
-})
+// })
 
 $(document).on("click", "#remove", function () {
 
@@ -210,7 +214,7 @@ $(document).on("click", "#remove", function () {
         // With that done, add the note information to the page
         .then(function (data) {
             console.log(data);
-            getFovorites();
+            location.reload();
         });
 })
 

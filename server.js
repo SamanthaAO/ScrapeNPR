@@ -70,7 +70,7 @@ var categories = [
         link: "https://www.npr.org/sections/health/"
     },
     {
-        category: "race and culture",
+        category: "RaceAndCulture",
         link: "https://www.npr.org/sections/codeswitch/"
     }
 ]
@@ -150,32 +150,32 @@ app.get("/scrape", function (req, res) {
 
 
 // Route for getting all Articles from the db
-app.get("/articles/category/:category", function (req, res) {
-    // Grab every document in the Articles collection
-    db.Article.find({ category: req.params.category })
-        .then(function (dbArticle) {
-            // If we were able to successfully find Articles, send them back to the client
-            res.json(dbArticle);
-        })
-        .catch(function (err) {
-            // If an error occurred, send it to the client
-            res.json(err);
-        });
-});
+// app.get("/articles/category/:category", function (req, res) {
+//     // Grab every document in the Articles collection
+//     db.Article.find({ category: req.params.category })
+//         .then(function (dbArticle) {
+//             // If we were able to successfully find Articles, send them back to the client
+//             res.json(dbArticle);
+//         })
+//         .catch(function (err) {
+//             // If an error occurred, send it to the client
+//             res.json(err);
+//         });
+// });
 
 // Route for getting favorites
-app.get("/favorites", function (req, res) {
-    // Grab every document in the Articles collection
-    db.Article.find({ favorite: true })
-        .then(function (dbArticle) {
-            // If we were able to successfully find Articles, send them back to the client
-            res.json(dbArticle);
-        })
-        .catch(function (err) {
-            // If an error occurred, send it to the client
-            res.json(err);
-        });
-});
+// app.get("/favorites", function (req, res) {
+//     // Grab every document in the Articles collection
+//     db.Article.find({ favorite: true })
+//         .then(function (dbArticle) {
+//             // If we were able to successfully find Articles, send them back to the client
+//             res.json(dbArticle);
+//         })
+//         .catch(function (err) {
+//             // If an error occurred, send it to the client
+//             res.json(err);
+//         });
+// });
 
 
 
@@ -269,8 +269,48 @@ app.post("/articles/:id", function(req, res) {
 
 
 app.get("/", function (req, res) {
-    res.render("national");
+    res.render("index");
 });
+
+app.get("/favorites", function (req, res) {
+    // Grab every document in the Articles collection
+    db.Article.find({ favorite: true })
+        .then(function (dbArticle) {
+            // If we were able to successfully find Articles, send them back to the client
+            var hbsObject = {
+                articles: dbArticle
+            }
+            console.log(hbsObject);
+            res.render("favorites", hbsObject);
+        })
+        .catch(function (err) {
+            // If an error occurred, send it to the client
+            res.json(err);
+        });
+});
+
+
+app.get("/:category", function (req, res) {
+    console.log(req.params)
+    // Grab every document in the Articles collection
+    db.Article.find({ category: req.params.category})
+    
+        .then(function (dbArticle) {
+            var hbsObject = {
+                articles: dbArticle
+            }
+            console.log(hbsObject);
+            // If we were able to successfully find Articles, send them back to the client
+            res.render(req.params.category, hbsObject);
+        })
+        .catch(function (err) {
+            // If an error occurred, send it to the client
+            res.json(err);
+        });
+    
+});
+
+
 
 // Start the server
 app.listen(PORT, function () {
