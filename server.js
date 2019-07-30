@@ -96,6 +96,8 @@ app.get("/scrape", function (req, res) {
     
                 // Add the text and href of every link, and save them as properties of the result object
                 result.category = category.category;
+
+                result.favorite = false;
     
                 result.title = $(this)
                     .children("div.item-info-wrap")
@@ -145,7 +147,7 @@ app.get("/scrape", function (req, res) {
 
 
 
-// }
+
 
 // Route for getting all Articles from the db
 app.get("/articles/category/:category", function (req, res) {
@@ -160,6 +162,72 @@ app.get("/articles/category/:category", function (req, res) {
             res.json(err);
         });
 });
+
+// Route for getting favorites
+app.get("/favorites", function (req, res) {
+    // Grab every document in the Articles collection
+    db.Article.find({ favorite: true })
+        .then(function (dbArticle) {
+            // If we were able to successfully find Articles, send them back to the client
+            res.json(dbArticle);
+        })
+        .catch(function (err) {
+            // If an error occurred, send it to the client
+            res.json(err);
+        });
+});
+
+
+
+// Route for saving/updating an Article's associated Note
+app.post("/favorites/:id", function(req, res) {
+    // Using the id passed in the id parameter, prepare a query that finds the matching one in our db...
+  db.Article.find({ _id: req.params.id })
+  // ..and populate all of the notes associated with it
+  db.Article.findOneAndUpdate({ _id: req.params.id }, {favorite: true})
+  .then(function(dbArticle) {
+    // If we were able to successfully find an Article with the given id, send it back to the client
+    res.json(dbArticle);
+  })
+  .catch(function(err) {
+    // If an error occurred, send it to the client
+    res.json(err);
+  });
+  });
+
+  // Route for saving/updating an Article's associated Note
+app.post("/unfavorites/:id", function(req, res) {
+    // Using the id passed in the id parameter, prepare a query that finds the matching one in our db...
+  db.Article.find({ _id: req.params.id })
+  // ..and populate all of the notes associated with it
+  db.Article.findOneAndUpdate({ _id: req.params.id }, {favorite: false})
+  .then(function(dbArticle) {
+    // If we were able to successfully find an Article with the given id, send it back to the client
+    res.json(dbArticle);
+  })
+  .catch(function(err) {
+    // If an error occurred, send it to the client
+    res.json(err);
+  });
+  });
+
+    // Route for saving/updating an Article's associated Note
+app.delete("/articles/note/delete/:id", function(req, res) {
+    // Using the id passed in the id parameter, prepare a query that finds the matching one in our db...
+  db.Note.find({ _id: req.params.id })
+  // ..and populate all of the notes associated with it
+  db.Note.findOneAndRemove({ _id: req.params.id })
+  .then(function(dbArticle) {
+    // If we were able to successfully find an Article with the given id, send it back to the client
+    res.json(dbArticle);
+  })
+  .catch(function(err) {
+    // If an error occurred, send it to the client
+    res.json(err);
+  });
+  });
+
+
 
 // Route for grabbing a specific Article by id, populate it with it's note
 app.get("/articles/:id", function(req, res) {
@@ -176,6 +244,8 @@ app.get("/articles/:id", function(req, res) {
       res.json(err);
     });
 });
+
+
 
 // Route for saving/updating an Article's associated Note
 app.post("/articles/:id", function(req, res) {

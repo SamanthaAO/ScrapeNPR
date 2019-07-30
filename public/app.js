@@ -38,48 +38,36 @@ $(document).on("click", "#leaveComment", function () {
 
             // If there's a note in the article
             if (data[0].notes) {
-                data[0].notes.forEach(function(note){
+                data[0].notes.forEach(function (note) {
                     // Place the title of the note in the title input
-                    $("#previousComments").append(`<strong>${note.title}:</strong>`);
+                    $("#previousComments").append(`<strong>${note.title}: </strong>`);
                     // Place the body of the note in the body textarea
-                    $("#previousComments").append(`${note.body} <br>`);
+                    $("#previousComments").append(`${note.body}`);
+                    $("#previousComments").append(`<button id="deleteComment" data-id="${note._id}"type="button" class="btn btn-light">Delete</button><br>`);
+                    
                 });
 
             }
         });
 })
 
+$(document).on("click", "#deleteComment", function () {
+    var thisId = $(this).attr("data-id");
 
-var getArticles = (category) => {
-    $("#articles").empty();
-    $.getJSON("/articles/category/" + category, function (data) {
-        // For each one
-        for (var i = 0; i < data.length; i++) {
-            // Display the apropos information on the page
-            $("#articles").append(
-                `<div class="col-sm-3">
-                <div data-id="${data[i]._id}" class="card" style="width: 18rem;">
-                
-    
-                    <img class="card-img-top" src="${data[i].image}" alt="${data[i].title}">
-                    <div class="card-body">
-                        <h5 class="card-title">${data[i].title}</h5>
-                        <p class="card-text">${data[i].summary}</p>
-                    <a href="${data[i].link}" class="btn btn-primary">View Article</a>
-                    <a href="#" id="leaveComment" data-id="${data[i]._id}" class="btn btn-primary">Leave Comment</a>
-                    </div>
-                </div>
-            </div>`);
+    $.ajax({
+        method: "DELETE",
+        url: "/articles/note/delete/" + thisId
+    })
+        // With that done
+        .then(function (data) {
+            // Log the response
+            console.log(data);
+            
+            // Empty the notes section
+            //$("#previousComments").empty();
+        });
 
-        }
-    });
-
-}
-
-getArticles("national");
-
-
-
+})
 
 // When you click the savenote button
 $(document).on("click", "#saveComment", function () {
@@ -107,7 +95,7 @@ $(document).on("click", "#saveComment", function () {
             //$("#previousComments").empty();
         });
 
-    
+
 
     // Also, remove the values entered in the input and textarea for note entry
     $("#nameInput").val("");
@@ -115,9 +103,126 @@ $(document).on("click", "#saveComment", function () {
 
     //display new comment
     // Place the title of the note in the title input
-    $("#previousComments").append(`<strong>${username}:</strong>`);
-    // Place the body of the note in the body textarea
-    $("#previousComments").append(`${content} <br>`);
+    // $("#previousComments").append(`<strong>${username}:</strong>`);
+    // // Place the body of the note in the body textarea
+    // $("#previousComments").append(`${content} <br>`);
+    // $("#previousComments").append(`<button type="button" class="btn btn-light">Delete</button><br>`);
 });
+
+
+
+
+var getArticles = (category) => {
+    $("#articles").empty();
+    $.getJSON("/articles/category/" + category, function (data) {
+        // For each one
+        for (var i = 0; i < data.length; i++) {
+            // Display the apropos information on the page
+            $("#articles").append(
+                `<div class="col-sm-3">
+                <div data-id="${data[i]._id}" class="card" style="width: 18rem;">
+                
+    
+                    <img class="card-img-top" src="${data[i].image}" alt="${data[i].title}">
+                    <div class="card-body">
+                        <h5 class="card-title">${data[i].title}</h5>
+                        <p class="card-text">${data[i].summary}</p>
+                    <a href="${data[i].link}" class="btn btn-primary">View Article</a>
+                    <a href="#" id="leaveComment" data-id="${data[i]._id}" class="btn btn-primary">Leave Comment</a>
+                    <a href="#" id="favorite" data-id="${data[i]._id}" class="btn btn-primary">Favorite</a>
+                    </div>
+                </div>
+            </div>`);
+
+        }
+    });
+
+}
+
+getArticles("national");
+
+function getFovorites() {
+    // Empty articles 
+    $("#articles").empty();
+
+
+    // Save the id from the p tag
+    var thisId = $(this).attr("data-id");
+
+    // Now make an ajax call for the Article
+    $.ajax({
+        method: "GET",
+        url: "/favorites"
+    })
+        // With that done, add the note information to the page
+        .then(function (data) {
+            console.log(data);
+
+            // If there's a note in the article
+            for (var i = 0; i < data.length; i++) {
+                // Display the apropos information on the page
+                $("#articles").append(
+                    `<div class="col-sm-3">
+                    <div data-id="${data[i]._id}" class="card" style="width: 18rem;">
+                    
+        
+                        <img class="card-img-top" src="${data[i].image}" alt="${data[i].title}">
+                        <div class="card-body">
+                            <h5 class="card-title">${data[i].title}</h5>
+                            <p class="card-text">${data[i].summary}</p>
+                        <a href="${data[i].link}" class="btn btn-primary">View Article</a>
+                        <a href="#" id="leaveComment" data-id="${data[i]._id}" class="btn btn-primary">Leave Comment</a>
+                        <a href="#" id="remove" data-id="${data[i]._id}" class="btn btn-primary">Remove</a>
+                        </div>
+                    </div>
+                </div>`);
+
+            }
+        });
+};
+
+$(document).on("click", "#viewFavorites", function () {
+
+    getFovorites();
+
+})
+
+$(document).on("click", "#remove", function () {
+
+    // Save the id from the p tag
+    var thisId = $(this).attr("data-id");
+
+    // Now make an ajax call for the Article
+    $.ajax({
+        method: "POST",
+        url: "/unfavorites/" + thisId
+    })
+        // With that done, add the note information to the page
+        .then(function (data) {
+            console.log(data);
+            getFovorites();
+        });
+})
+
+$(document).on("click", "#favorite", function () {
+    // remove favorite button
+    $(this).hide();
+
+
+    // Save the id from the p tag
+    var thisId = $(this).attr("data-id");
+
+    // Now make an ajax call for the Article
+    $.ajax({
+        method: "POST",
+        url: "/favorites/" + thisId
+    })
+        // With that done, add the note information to the page
+        .then(function (data) {
+            console.log(data);
+            // $("#favorite").hide();
+        });
+})
+
 
 
