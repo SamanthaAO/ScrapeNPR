@@ -1,5 +1,4 @@
-
-
+<h1 class="text-center">National</h1>
 
 <div class="container ">
     <div class="row justify-content-center">
@@ -12,13 +11,17 @@
                 <div class="card-body">
                     <h5 class="card-title">{{title}}</h5>
                     <p class="card-text">{{summary}}</p>
-                    <a href="{{link}}" class="btn btn-primary">View Article</a>
-                    <button id="leaveComment" data-id="{{_id}}" class="btn btn-primary">Leave Comment</button>
-                    <button id="favorite" data-id="{{_id}}" class="btn btn-primary">Favorite</button>
+                    <div class="text-center">
+                        <a href="{{link}}" class="btn btn-primary m-1">View Article</a>
+                        <button id="leaveComment" data-id="{{_id}}" class="btn btn-primary m-1">Leave
+                            Comment</button>
+                        {{#unless favorite}}
+                        <button id="favorite" data-id="{{_id}}" class="btn btn-primary m-1">Favorite</button>
+                        {{/unless}}
+                    </div>
                 </div>
             </div>
         </div>
         {{/each}}
     </div>
 </div>
-

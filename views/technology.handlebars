@@ -1,21 +1,24 @@
-
-
-
+<h1 class="text-center">Technology</h1>
 
 <div class="container ">
     <div class="row justify-content-center">
         {{#each articles}}
         <div class="col-sm-3 m-2">
-            <div data-id="={{_id}}" class="card" style="width: 18rem;">
+            <div data-id="{{_id}}" class="card" style="width: 18rem;">
 
 
                 <img class="card-img-top" src="{{image}}" alt="{{title}}">
                 <div class="card-body">
                     <h5 class="card-title">{{title}}</h5>
                     <p class="card-text">{{summary}}</p>
-                    <a href="{{link}}" class="btn btn-primary">View Article</a>
-                    <button id="leaveComment" data-id="{{_id}}" class="btn btn-primary">Leave Comment</button>
-                    <a href="#" id="favorite" data-id="{{_id}}" class="btn btn-primary">Favorite</a>
+                    <div class="text-center">
+                        <a href="{{link}}" class="btn btn-primary m-1">View Article</a>
+                        <button id="leaveComment" data-id="{{_id}}" class="btn btn-primary m-1">Leave
+                            Comment</button>
+                        {{#unless favorite}}
+                        <button id="favorite" data-id="{{_id}}" class="btn btn-primary m-1">Favorite</button>
+                        {{/unless}}
+                    </div>
                 </div>
             </div>
         </div>

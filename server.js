@@ -269,7 +269,7 @@ app.post("/articles/:id", function(req, res) {
 
 
 app.get("/", function (req, res) {
-    res.render("index");
+    res.redirect('/national');
 });
 
 app.get("/favorites", function (req, res) {
