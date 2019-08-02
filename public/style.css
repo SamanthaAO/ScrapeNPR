@@ -1,0 +1,11 @@
+body {
+    background-image: url("background.jpg");
+  }
+
+.container {
+    background-color: white;
+}
+
+.jumbotron {
+    background-color: white;
+}

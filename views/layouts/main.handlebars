@@ -4,46 +4,25 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta http-equiv="X-UA-Compatible" content="ie=edge">
-    <title>NPR Scrapper</title>
+    <title>NPR Scraper</title>
     <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css" integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
+    <link href="/style.css" rel="stylesheet">
 </head>
 <body>
-    <div class="jumbotron text-center">
-  <h1 class="display-4">Scrapping</h1>
-  <img src="npr.png" width="70%">
+<div class="jumbotron text-center py-3">
+  <h1 class="display-4">Scraping</h1>
+  <img src="npr.png" width="50%">
   <p class="lead">To view the most current articles on NPR click the scrape button below.</p>
   <hr class="my-4">
   
-  <button class="btn btn-primary btn-lg" id="scrape" role="button">Scrape NPR</button>
+
+  <button class="btn btn-danger btn-lg" id="clearScrape" role="button">Clear Articles</button>
+  <button class="btn btn-dark btn-lg" id="scrape" role="button">Scrape NPR</button>
   <a href="/favorites"class="btn btn-primary btn-lg" id="viewFavorites" role="button">View Favorites</a>
+
 </div>
 
-<ul class="nav justify-content-center">
-  <li class="nav-item">
-    <a class="nav-link" href="/national">National</a>
-  </li>
-  <li class="nav-item">
-    <a class="nav-link" href="/world">World</a>
-  </li>
-  <li class="nav-item">
-    <a class="nav-link" href="/politics">Politics</a>
-  </li>
-  <li class="nav-item">
-    <a class="nav-link" href="/business">Business</a>
-  </li>
-  <li class="nav-item">
-    <a class="nav-link" href="/technology">Technology</a>
-  </li>
-  <li class="nav-item">
-    <a class="nav-link" href="/science">Science</a>
-  </li>
-  <li class="nav-item">
-    <a class="nav-link" href="/health">Health</a>
-  </li>
-  <li class="nav-item">
-    <a class="nav-link" href="/RaceAndCulture">Race and Culture</a>
-  </li>
-</ul>
+
 
     {{{body}}}
 
